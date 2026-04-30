@@ -22,7 +22,8 @@ Vi oprettede på en github og et miroboard og gik i gang med at teste dronen. De
 I dag har vi fløjet meget mere med dronen. Vi har også lavet noget kode med python (med meget hjælp fra Claude), så vi kunne få dronen til at flyve vha. tastatur. Vi har lavet en midlertidig løsning for at teste, om dronen kunne flyve med både tepose og krog, hvilket den kan.
 
 Koden for i dag:
-´´´
+
+```
 """
 Tello Drone - Smooth keyboard styring + kamerafeed
 Krav: pip install djitellopy opencv-python keyboard
@@ -46,14 +47,14 @@ from djitellopy import Tello
 import threading
 import time
 
- ──────────────────────────────────────────────
- Indstillinger
- ──────────────────────────────────────────────
+ 
+// Indstillinger
+ 
 SPEED = 50   # cm/s (0-100)
 
- ──────────────────────────────────────────────
- Initialisering
- ──────────────────────────────────────────────
+ 
+// Initialisering
+ 
 tello = Tello()
 tello.connect()
 print(f"Batteri: {tello.get_battery()}%")
@@ -64,9 +65,9 @@ frame_reader = tello.get_frame_read()
 in_flight = False
 running   = True
 
- ──────────────────────────────────────────────
- Styretråd — sender RC-kommandoer 20x/sek
- ──────────────────────────────────────────────
+
+// Styretråd — sender RC-kommandoer 20x/sek
+ 
 def control_loop():
     global in_flight, running
     while running:
@@ -89,9 +90,9 @@ def control_loop():
 ctrl_thread = threading.Thread(target=control_loop, daemon=True)
 ctrl_thread.start()
 
- ──────────────────────────────────────────────
- Hoved-loop (video + enkelt-taster)
- ──────────────────────────────────────────────
+
+// Hoved-loop (video + enkelt-taster)
+ 
 print("T=takeoff  L=land  Q=afslut  WASD=retning  E/C=op/ned  Z/X=roter")
 
 while running:
@@ -130,13 +131,12 @@ while running:
         print("Landing!")
         time.sleep(0.5)
 
- ─────────────────────────────────────────────
- Oprydning
- ──────────────────────────────────────────────
+// Oprydning
+ 
 if in_flight:
     tello.land()
 tello.streamoff()
 tello.end()
 cv2.destroyAllWindows()
 print("Afsluttet.")
-´´´
+```
