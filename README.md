@@ -46,14 +46,14 @@ from djitellopy import Tello
 import threading
 import time
 
-# ──────────────────────────────────────────────
-# Indstillinger
-# ──────────────────────────────────────────────
+ ──────────────────────────────────────────────
+ Indstillinger
+ ──────────────────────────────────────────────
 SPEED = 50   # cm/s (0-100)
 
-# ──────────────────────────────────────────────
-# Initialisering
-# ──────────────────────────────────────────────
+ ──────────────────────────────────────────────
+ Initialisering
+ ──────────────────────────────────────────────
 tello = Tello()
 tello.connect()
 print(f"Batteri: {tello.get_battery()}%")
@@ -64,9 +64,9 @@ frame_reader = tello.get_frame_read()
 in_flight = False
 running   = True
 
-# ──────────────────────────────────────────────
-# Styretråd — sender RC-kommandoer 20x/sek
-# ──────────────────────────────────────────────
+ ──────────────────────────────────────────────
+ Styretråd — sender RC-kommandoer 20x/sek
+ ──────────────────────────────────────────────
 def control_loop():
     global in_flight, running
     while running:
@@ -89,9 +89,9 @@ def control_loop():
 ctrl_thread = threading.Thread(target=control_loop, daemon=True)
 ctrl_thread.start()
 
-# ──────────────────────────────────────────────
-# Hoved-loop (video + enkelt-taster)
-# ──────────────────────────────────────────────
+ ──────────────────────────────────────────────
+ Hoved-loop (video + enkelt-taster)
+ ──────────────────────────────────────────────
 print("T=takeoff  L=land  Q=afslut  WASD=retning  E/C=op/ned  Z/X=roter")
 
 while running:
@@ -130,9 +130,9 @@ while running:
         print("Landing!")
         time.sleep(0.5)
 
-# ──────────────────────────────────────────────
-# Oprydning
-# ──────────────────────────────────────────────
+ ─────────────────────────────────────────────
+ Oprydning
+ ──────────────────────────────────────────────
 if in_flight:
     tello.land()
 tello.streamoff()
