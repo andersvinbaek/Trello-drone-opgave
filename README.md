@@ -140,3 +140,7 @@ tello.end()
 cv2.destroyAllWindows()
 print("Afsluttet.")
 ```
+
+
+Grund ide af dronens funktion
+<img width="1778" height="310" alt="image" src="https://github.com/user-attachments/assets/b4f50268-66fb-4aa5-a69d-9bf31204d162" />
