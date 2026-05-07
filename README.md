@@ -13,9 +13,15 @@ Løsningen er, at sætte en krog på Tello-dronen, der så kan samle tebrevet op
 
 ## Grund ide af dronens funktion
 <img width="1778" height="310" alt="image" src="https://github.com/user-attachments/assets/b4f50268-66fb-4aa5-a69d-9bf31204d162" />
+<br>
 
 ## Tellodrone-specifikationer
 <img width="1468" height="1246" alt="image" src="https://github.com/user-attachments/assets/afc79d20-1a79-4e28-a407-8aad5dd1a679" />
+<br>
+
+## Blockdiagram over montering dele
+<img width="4218" height="948" alt="image" src="https://github.com/user-attachments/assets/f8b1417e-9511-47fc-9560-d525e21b5809" />
+<br>
 
 <details>
 <summary><h1>Logbog</h1></summary>
@@ -30,7 +36,8 @@ I dag har vi fløjet meget mere med dronen. Vi har også lavet noget kode med py
   <details>
   <summary><h2>Kode - 30/04/26</h2></summary>
 
-  ```
+```
+"""
 Tello Drone - Smooth keyboard styring + kamerafeed
 Krav: pip install djitellopy opencv-python keyboard
 
@@ -53,7 +60,7 @@ from djitellopy import Tello
 import threading
 import time
 
- 
+
 // Indstillinger
  
 SPEED = 50   # cm/s (0-100)
@@ -239,5 +246,12 @@ tello.streamoff()
 <details>
 <summary><h1>Bilag</h1></summary>
 
-  XYZ - mangler billeder
+## Dronen med udstyr
+<img width="3024" height="4032" alt="IMG_5469" src="https://github.com/user-attachments/assets/4ca01080-9d02-4b84-858b-e3d60ad6f110" />
+<br>
+<img width="3024" height="4032" alt="IMG_5470" src="https://github.com/user-attachments/assets/1eed3304-8e7b-4e10-8c10-5e6e75688a49" />
+<br>
+<img width="3024" height="4032" alt="IMG_5471" src="https://github.com/user-attachments/assets/6da7ed00-ac11-44a5-917e-c1e2ef1fc9c6" />
+<br>
+
 </details>
