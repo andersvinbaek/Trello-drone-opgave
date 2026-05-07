@@ -241,8 +241,135 @@ cv2.destroyAllWindows()
 tello.streamoff()
 ```
   </details>
-</details>
 
+## Logbog 07/05/26
+I dag arbejdede vi med at få dronen til at virke effektiv med python, og få kameratet til at vise et klart billede <br>
+Hovedmålet var at lave koden så dronen fungere lidt ligsom den fra Palantir, hvor den kan jagte efter personen hoved og derefter styrte ind i dem. 
+  <details>
+  <summary><h2>Kode - 07/05/26</h2></summary>
+
+```
+from djitellopy import Tello
+import cv2
+import mediapipe as mp
+import numpy as np
+import time
+
+# --- INITIALISERING ---
+tello = Tello()
+
+def start_tello():
+    try:
+        tello.connect()
+        print(f"Batteri: {tello.get_battery()}%")
+        tello.streamon()
+        # Giv den tid til at åbne porten
+        time.sleep(2)
+        return tello.get_frame_read()
+    except Exception as e:
+        print(f"Forbindelsesfejl: {e}")
+        return None
+
+frame_reader = start_tello()
+
+# MediaPipe Pose - Hurtig konfiguration
+mp_pose = mp.solutions.pose
+pose = mp_pose.Pose(
+    static_image_mode=False,
+    model_complexity=0, # 0 er hurtigst, forhindrer frys
+    min_detection_confidence=0.5,
+    min_tracking_confidence=0.5
+)
+
+# --- INDSTILLINGER ---
+MAX_SPEED = 100       # Fuld gas fremad
+TARGET_SIZE = 35000   # Stop-afstand (ca. 30 cm)
+flying = False
+
+print("KLAR! Tryk 'T' for Takeoff (Jagt starter med det samme)")
+
+while True:
+    # 1. HENT NYESTE FRAME (Undgå kø/buffer frys)
+    frame = frame_reader.frame
+    if frame is None:
+        continue
+
+    # 2. OPTIMERING: Kør AI på en meget lille kopi (mindsker CPU belastning)
+    h, w, _ = frame.shape
+    img_display = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+    small_frame = cv2.resize(frame, (320, 240))
+    results = pose.process(small_frame)
+
+    lr, fb, ud, yv = 0, 0, 0, 0
+
+    # 3. JAGTLOGIK
+    if results.pose_landmarks:
+        lan = results.pose_landmarks.landmark
+        
+        # Find center mellem skuldre (virker forfra og bagfra)
+        l_sh = lan[mp_pose.PoseLandmark.LEFT_SHOULDER]
+        r_sh = lan[mp_pose.PoseLandmark.RIGHT_SHOULDER]
+        
+        # Beregn center (vandret)
+        cx = int(((l_sh.x + r_sh.x) / 2) * w)
+        
+        # Drej mod mål (Yaw)
+        yv = int((cx - (w // 2)) * 0.8)
+        yv = np.clip(yv, -90, 90)
+
+        if flying:
+            # Afstandsberegning
+            width = abs(l_sh.x - r_sh.x) * w
+            current_size = width * 200
+            
+            # Flyv frem hvis vi er under target
+            if (TARGET_SIZE - current_size) > 1500:
+                fb = MAX_SPEED
+            
+            # Juster højde (kig efter næsen)
+            nose_y = int(lan[0].y * h)
+            ud = int(((h // 2) - nose_y) * 0.5)
+            ud = np.clip(ud, -40, 40)
+
+        # Tegn mål-indikator
+        cv2.circle(img_display, (cx, h//2), 20, (0, 0, 255), 2)
+        cv2.putText(img_display, "TARGET LOCKED", (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
+    
+    else:
+        # SØGE-MODE (Hvis ingen er fundet)
+        if flying:
+            yv = 50 # Snur rundt
+            cv2.putText(img_display, "SEARCHING...", (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+
+    # 4. VISNING
+    cv2.imshow("Tello Hunter Pro", img_display)
+
+    # 5. TASTEKONTROL
+    key = cv2.waitKey(1) & 0xFF
+    if key == 27: # ESC
+        break
+    elif key == ord('t'):
+        print("TAKING OFF...")
+        tello.takeoff()
+        # FIX FOR VIDEO-FRYS: Rens buffer efter takeoff
+        time.sleep(1)
+        flying = True
+    elif key == ord('l'):
+        tello.land()
+        flying = False
+
+    # 6. SEND KOMMANDOER
+    if flying:
+        tello.send_rc_control(lr, fb, ud, yv)
+
+# --- RYD OP ---
+tello.land()
+tello.streamoff()
+cv2.destroyAllWindows()
+tello.end()
+```
+  </details>
+</details>
 <details>
 <summary><h1>Bilag</h1></summary>
 
