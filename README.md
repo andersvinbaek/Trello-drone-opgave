@@ -11,20 +11,26 @@ Problemet er, at når du er sengelæggende, kan man have svært ved at komme ud 
 
 Løsningen er, at sætte en krog på Tello-dronen, der så kan samle tebrevet op, og føre det over i en kop med varmt vand.
 
+## Grund ide af dronens funktion
+<img width="1778" height="310" alt="image" src="https://github.com/user-attachments/assets/b4f50268-66fb-4aa5-a69d-9bf31204d162" />
+
 ## Tellodrone-specifikationer
 <img width="1468" height="1246" alt="image" src="https://github.com/user-attachments/assets/afc79d20-1a79-4e28-a407-8aad5dd1a679" />
 
-## Logbog 28/04-26
+<details>
+<summary><h1>Logbog</h1></summary>
+  
+## Logbog 28/04/26
 I dag er vi startet op på det nye emne i informatik: Droner. Vi er blevet introduceret til droner generelt, lidt kort om forløbet, og har fået udleveret et ny projekt, hvor vi skal lave noget med droner.
 Vi oprettede på en github og et miroboard og gik i gang med at teste dronen. Derefter lavede vi lidt idégenerering og lavede vores problemformulering.
 
-## Logbog 30/04-26
+## Logbog 30/04/26
 I dag har vi fløjet meget mere med dronen. Vi har også lavet noget kode med python (med meget hjælp fra Claude), så vi kunne få dronen til at flyve vha. tastatur. Vi har lavet en midlertidig løsning for at teste, om dronen kunne flyve med både tepose og krog, hvilket den kan.
 
-Koden for i dag:
+  <details>
+  <summary><h2>Kode - 30/04/26</h2></summary>
 
-```
-"""
+  ```
 Tello Drone - Smooth keyboard styring + kamerafeed
 Krav: pip install djitellopy opencv-python keyboard
 
@@ -140,7 +146,98 @@ tello.end()
 cv2.destroyAllWindows()
 print("Afsluttet.")
 ```
+  </details>
 
+## Logbog 04/05/26
+I dag har vi expermenteret med en kode så dronen ville kunne lande ved at se en specifik farve. Vi har også styrtet dronen et par gange mens vi forsøgte at flyve med krogen, som vi havde forstærket.
 
-Grund ide af dronens funktion
-<img width="1778" height="310" alt="image" src="https://github.com/user-attachments/assets/b4f50268-66fb-4aa5-a69d-9bf31204d162" />
+  <details>
+  <summary><h2>Kode - 04/05/26</h2></summary>
+
+```
+from djitellopy import Tello
+import cv2
+import numpy as np
+import time
+
+tello = Tello()
+
+print("Forbinder...")
+tello.connect()
+
+print("Batteri:", tello.get_battery())
+
+tello.streamon()
+time.sleep(2)
+
+tello.takeoff()
+time.sleep(2)
+
+print("Kører... (lander når rød farve opdages)")
+
+red_detected_counter = 0
+RED_THRESHOLD_FRAMES = 10  # hvor mange frames i træk der skal være rød
+
+while True:
+    frame = tello.get_frame_read().frame
+    if frame is None:
+        continue
+
+    # Konverter til HSV
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    # Rød farve (to ranges i HSV)
+    lower_red1 = np.array([0, 120, 70])
+    upper_red1 = np.array([10, 255, 255])
+
+    lower_red2 = np.array([170, 120, 70])
+    upper_red2 = np.array([180, 255, 255])
+
+    mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
+    mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
+
+    mask = mask1 + mask2
+
+    # Fjern støj
+    mask = cv2.GaussianBlur(mask, (5, 5), 0)
+
+    # Find hvor meget rød der er
+    red_pixels = cv2.countNonZero(mask)
+    total_pixels = frame.shape[0] * frame.shape[1]
+
+    red_ratio = red_pixels / total_pixels
+
+    # Visualisering
+    cv2.imshow("Tello Kamera", frame)
+    cv2.imshow("Rød maske", mask)
+
+    # Hvis der er nok rød i billedet
+    if red_ratio > 0.08:  # justér denne værdi hvis nødvendigt
+        red_detected_counter += 1
+        print("Rød set:", red_detected_counter)
+    else:
+        red_detected_counter = 0
+
+    # Hvis rød ses stabilt → land
+    if red_detected_counter >= RED_THRESHOLD_FRAMES:
+        print("Rød farve bekræftet - lander!")
+        tello.land()
+        break
+
+    key = cv2.waitKey(1) & 0xFF
+
+    if key == 27:  # ESC = nødlanding
+        tello.land()
+        break
+        
+cv2.destroyAllWindows()
+tello.streamoff()
+```
+  </details>
+</details>
+
+<details>
+<summary><h1>Bilag</h1></summary>
+
+  XYZ - mangler billeder
+</details>
