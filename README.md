@@ -3,25 +3,37 @@
 ## Links:
 https://miro.com/app/board/uXjVHb_ljOQ=/
 
+---
+
 ## Idégenerering
 <img width="2582" height="774" alt="billede" src="https://github.com/user-attachments/assets/9e060b80-0335-4b95-86b8-16429f27e039" />
+
+---
 
 ## Problemformulering
 Problemet er, at når du er sengelæggende, kan man have svært ved at komme ud af sengen (det kræver meget energi). Så hvis du skal have en dejlig lille forfriskning i form af en kop te, kan det være umuligt, ellers skal du vente længe på en sygeplejerske eller SOSU-arbejder.
 
 Løsningen er, at sætte en krog på Tello-dronen, der så kan samle tebrevet op, og føre det over i en kop med varmt vand.
 
+---
+
 ## Grund ide af dronens funktion
 <img width="1778" height="310" alt="image" src="https://github.com/user-attachments/assets/b4f50268-66fb-4aa5-a69d-9bf31204d162" />
 <br>
+
+---
 
 ## Tellodrone-specifikationer
 <img width="1468" height="1246" alt="image" src="https://github.com/user-attachments/assets/afc79d20-1a79-4e28-a407-8aad5dd1a679" />
 <br>
 
+---
+
 ## Blockdiagram over montering dele
 <img width="4218" height="948" alt="image" src="https://github.com/user-attachments/assets/f8b1417e-9511-47fc-9560-d525e21b5809" />
 <br>
+
+---
 
 <details>
 <summary><h1>Logbog</h1></summary>
@@ -29,6 +41,8 @@ Løsningen er, at sætte en krog på Tello-dronen, der så kan samle tebrevet op
 ## Logbog 28/04/26
 I dag er vi startet op på det nye emne i informatik: Droner. Vi er blevet introduceret til droner generelt, lidt kort om forløbet, og har fået udleveret et ny projekt, hvor vi skal lave noget med droner.
 Vi oprettede på en github og et miroboard og gik i gang med at teste dronen. Derefter lavede vi lidt idégenerering og lavede vores problemformulering.
+
+---
 
 ## Logbog 30/04/26
 I dag har vi fløjet meget mere med dronen. Vi har også lavet noget kode med python (med meget hjælp fra Claude), så vi kunne få dronen til at flyve vha. tastatur. Vi har lavet en midlertidig løsning for at teste, om dronen kunne flyve med både tepose og krog, hvilket den kan.
@@ -155,6 +169,8 @@ print("Afsluttet.")
 ```
   </details>
 
+---
+
 ## Logbog 04/05/26
 I dag har vi expermenteret med en kode så dronen ville kunne lande ved at se en specifik farve. Vi har også styrtet dronen et par gange mens vi forsøgte at flyve med krogen, som vi havde forstærket.
 
@@ -241,6 +257,8 @@ cv2.destroyAllWindows()
 tello.streamoff()
 ```
   </details>
+
+---
 
 ## Logbog 07/05/26
 I dag arbejdede vi med at få dronen til at virke effektiv med python, og få kameratet til at vise et klart billede <br>
@@ -369,16 +387,183 @@ cv2.destroyAllWindows()
 tello.end()
 ```
   </details>
+
+---
+
+## Logbog 08/05/26
+Vi arbejdede vidre med palentir drone idéen, vi skrev noget nyt kode som benytter Ai til søgning efter personer. <br>
+Vi har tilføjet således at dronen ikke styrter ind i folk men derimod holder ca 1 meters afstand fra personen. <br>
+  <details>
+  <summary><h2>Kode - 08/05/26</summary>
+
+```
+import cv2
+import numpy as np
+from djitellopy import Tello
+from ultralytics import YOLO
+import time
+
+# =========================
+# INDSTILLINGER
+# =========================
+FOLLOW_SPEED = 100        # Start-hastighed (kan ændres med +/-)
+TARGET_AREA = 70000      
+TRACKING = False         # Start med tracking slået FRA
+
+# Følsomhed for AI
+YAW_GAIN = 0.20
+FB_GAIN = 0.0008
+UD_GAIN = 0.25
+
+# =========================
+# INITIALISERING
+# =========================
+tello = Tello()
+try:
+    tello.connect()
+    print(f"Batteri: {tello.get_battery()}%")
+    tello.streamon()
+    time.sleep(1)
+except Exception as e:
+    print(f"Fejl ved forbindelse: {e}")
+
+# YOLO model
+model = YOLO("yolov8n.pt") 
+
+def get_person(results):
+    best_box, best_area = None, 0
+    for r in results:
+        for box in r.boxes:
+            if int(box.cls[0]) == 0: 
+                x1, y1, x2, y2 = map(int, box.xyxy[0])
+                area = (x2 - x1) * (y2 - y1)
+                if area > best_area:
+                    best_area = area
+                    best_box = (x1, y1, x2, y2)
+    return best_box, best_area
+
+is_flying = False
+keep_running = True
+
+# =========================
+# HOVEDLØKKE
+# =========================
+try:
+    while keep_running:
+        frame_container = tello.get_frame_read()
+        if frame_container is None: continue
+        frame_raw = frame_container.frame
+        if frame_raw is None: continue
+
+        frame = cv2.cvtColor(frame_raw, cv2.COLOR_RGB2BGR)
+        h, w, _ = frame.shape
+
+        # AI Analyse (Kører altid så du kan se boksen)
+        results = model(frame, verbose=False)
+        person_box, area = get_person(results)
+
+        # Nulstil hastigheder for hvert loop
+        lr, fb, ud, yv = 0, 0, 0, 0
+
+        # --- TASTATUR INPUT ---
+        key = cv2.waitKey(1) & 0xFF
+        
+        # Basis kommandoer
+        if key == ord('z'):
+            tello.takeoff()
+            is_flying = True
+        elif key == ord('l'):
+            tello.land()
+            is_flying = False
+        elif key == 27: # ESC
+            keep_running = False 
+
+        # Manuel styring (W, S, A, D, Q, E, R, F)
+        if key == ord('w'): fb = FOLLOW_SPEED
+        elif key == ord('s'): fb = -FOLLOW_SPEED
+        elif key == ord('a'): lr = -FOLLOW_SPEED
+        elif key == ord('d'): lr = FOLLOW_SPEED
+        elif key == ord('q'): yv = -FOLLOW_SPEED
+        elif key == ord('e'): yv = FOLLOW_SPEED
+        elif key == ord('r'): ud = FOLLOW_SPEED
+        elif key == ord('f'): ud = -FOLLOW_SPEED
+
+        # Indstillinger
+        elif key == ord('p'): 
+            TRACKING = not TRACKING
+            print(f"AI Tracking: {TRACKING}")
+        elif key == ord('+') or key == ord('='):
+            FOLLOW_SPEED = min(FOLLOW_SPEED + 10, 100)
+            print(f"Hastighed øget til: {FOLLOW_SPEED}")
+        elif key == ord('-'):
+            FOLLOW_SPEED = max(FOLLOW_SPEED - 10, 10)
+            print(f"Hastighed sænket til: {FOLLOW_SPEED}")
+
+        # --- AI LOGIK (Kun hvis ingen manuelle taster trykkes og TRACKING er ON) ---
+        manual_active = any([fb, lr, ud, yv])
+        
+        if TRACKING and is_flying and not manual_active and person_box is not None:
+            x1, y1, x2, y2 = person_box
+            cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
+            
+            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 255), 2)
+            
+            error_x = cx - w // 2
+            error_y = cy - h // 2
+            
+            yv = int(np.clip(error_x * YAW_GAIN, -FOLLOW_SPEED, FOLLOW_SPEED))
+            ud = int(np.clip(-error_y * UD_GAIN, -40, 40))
+            
+            if area < TARGET_AREA:
+                fb = FOLLOW_SPEED
+            
+            cv2.putText(frame, "AI TRACKING: ACTIVE", (20, 40), 0, 0.8, (0, 0, 255), 2)
+
+        # Send kommandoer til dronen
+        if is_flying:
+            tello.send_rc_control(lr, fb, ud, yv)
+
+        # --- HUD / VISUALS ---
+        cv2.putText(frame, f"Speed: {FOLLOW_SPEED} | AI: {TRACKING}", (10, h-80), 0, 0.6, (0, 255, 0), 2)
+        cv2.putText(frame, f"Bat: {tello.get_battery()}% | T: Takeoff | L: Land", (10, h-50), 0, 0.6, (255, 255, 0), 2)
+        cv2.putText(frame, "W/S/A/D/Q/E/R/F: Control | ESC: Quit", (10, h-20), 0, 0.6, (255, 255, 255), 1)
+        
+        if person_box is not None:
+             cv2.rectangle(frame, (person_box[0], person_box[1]), (person_box[2], person_box[3]), (0, 255, 0), 2)
+
+        cv2.imshow("Tello Full Control Mode", frame)
+
+except Exception as e:
+    print(f"Fejl: {e}")
+
+finally:
+    print("Shutting down...")
+    if is_flying:
+        tello.land()
+    tello.streamoff()
+    cv2.destroyAllWindows()
+```
+</details>
+
+---
+
 </details>
 <details>
 <summary><h1>Bilag</h1></summary>
 
+---
+
 ## Dronen med udstyr
 <img width="3024" height="4032" alt="IMG_5469" src="https://github.com/user-attachments/assets/4ca01080-9d02-4b84-858b-e3d60ad6f110" />
-<br>
+
+---
+
 <img width="3024" height="4032" alt="IMG_5470" src="https://github.com/user-attachments/assets/1eed3304-8e7b-4e10-8c10-5e6e75688a49" />
-<br>
+
+---
+
 <img width="3024" height="4032" alt="IMG_5471" src="https://github.com/user-attachments/assets/6da7ed00-ac11-44a5-917e-c1e2ef1fc9c6" />
-<br>
+
+---
 
 </details>
