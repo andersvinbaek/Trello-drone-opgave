@@ -35,97 +35,63 @@ Løsningen er, at sætte en krog på Tello-dronen, der så kan samle tebrevet op
 
 ---
 
-# 10 Usability Heuristics – Spørgsmål til Evaluering
-
-## 1. Visibility of System Status
-- Får brugeren tydelig feedback efter handlinger?
-- Viser systemet hvad der sker lige nu?
-- Informeres brugeren hurtigt nok om ændringer eller processer?
-- Er loading, fejl og succesbeskeder synlige og forståelige?
-- Skaber systemets feedback tillid hos brugeren?
+## Trelags-arkitektur
+<img width="356" height="665" alt="image" src="https://github.com/user-attachments/assets/58a824bf-5c41-454b-a4f5-caf01fc96e46" />
+<br>
 
 ---
 
-## 2. Match Between the System and the Real World
-- Bruger systemet ord og begreber som målgruppen forstår?
-- Følger interfacet virkelighedens logik og konventioner?
-- Er ikoner og symboler intuitive?
-- Præsenteres information i en naturlig rækkefølge?
-- Matcher brugerens forventninger systemets funktioner?
+<details>
+  <summary><h1>10 Brugervenlighedsheuristikker</h1></summary>
+
+## 1. Systemstatussynlighed
+- Får brugeren tydelig feedback fra systemet?
 
 ---
 
-## 3. User Control and Freedom
-- Kan brugeren nemt fortryde handlinger?
-- Findes der en tydelig “tilbage” eller “annuller” funktion?
-- Kan brugeren slippe ud af fejl eller uønskede handlinger hurtigt?
-- Føler brugeren kontrol over systemet?
-- Understøtter systemet undo/redo?
+## 2. Match mellem system og virkelighed
+- Matcher systemet brugerens sprog og forventninger?
 
 ---
 
-## 4. Consistency and Standards
-- Er designet konsekvent gennem hele systemet?
-- Bruges de samme ord, farver og funktioner ens overalt?
-- Følger systemet almindelige standarder og konventioner?
-- Er navigation og layout genkendeligt?
-- Kræver systemet at brugeren lærer nye unødvendige mønstre?
+## 3. Brugerkontrol og frihed
+- Har brugeren kontrol over sine handlinger i systemet?
 
 ---
 
-## 5. Error Prevention
-- Forhindrer systemet fejl før de opstår?
-- Er farlige handlinger beskyttet med bekræftelser?
-- Er standardvalg sikre og logiske?
-- Hjælper designet brugeren med at undgå fejl?
-- Er højrisiko-fejl prioriteret i designet?
+## 4. Konsistens og standarder
+- Er designet konsekvent og følger almindelige standarder?
 
 ---
 
-## 6. Recognition Rather than Recall
-- Skal brugeren huske information unødigt?
-- Er vigtige funktioner og muligheder synlige?
-- Er labels og instruktioner lette at finde?
-- Hjælper systemet brugeren med genkendelse frem for hukommelse?
-- Gives hjælp direkte i konteksten?
+## 5. Forebyggelse af fejl
+- Hjælper systemet med at forhindre fejl før de opstår?
 
 ---
 
-## 7. Flexibility and Efficiency of Use
-- Findes der genveje til erfarne brugere?
-- Kan brugeren tilpasse systemet?
-- Understøtter systemet både begyndere og eksperter?
-- Kan ofte brugte handlinger udføres hurtigt?
-- Er workflowet effektivt og fleksibelt?
+## 6. Genkendelse frem for hukommelse
+- Gør systemet det nemt at genkende information frem for at huske den?
 
 ---
 
-## 8. Aesthetic and Minimalist Design
-- Indeholder interfacet kun relevant information?
-- Fjernes unødvendige elementer og distraktioner?
-- Understøtter designet brugerens primære mål?
-- Er layoutet overskueligt og simpelt?
-- Er balancen mellem æstetik og funktionalitet god?
+## 7. Fleksibilitet og effektivitet
+- Understøtter systemet både nye og erfarne brugere effektivt?
 
 ---
 
-## 9. Help Users Recognize, Diagnose, and Recover from Errors
-- Er fejlbeskeder skrevet i almindeligt sprog?
-- Forklarer systemet tydeligt hvad problemet er?
-- Gives der konkrete løsninger på fejl?
-- Er fejl visuelt tydelige?
-- Hjælper systemet brugeren videre efter en fejl?
+## 8. Æstetisk og minimalistisk design
+- Er designet enkelt, overskueligt og fokuseret på det vigtigste?
 
 ---
 
-## 10. Help and Documentation
-- Er hjælpedokumentation nem at finde?
-- Er hjælpen relevant for brugerens aktuelle situation?
-- Gives der konkrete trin-for-trin instruktioner?
-- Kan brugeren løse problemer uden ekstern hjælp?
-- Er dokumentationen kort og præcis?
+## 9. Hjælp brugeren med at forstå og rette fejl
+- Hjælper systemet brugeren med at identificere og løse fejl?
 
 ---
+
+## 10. Hjælp og dokumentation
+- Er hjælp og dokumentation let tilgængelig og brugbar?
+</details>
 
 <details>
 <summary><h1>Logbog</h1></summary>
@@ -640,6 +606,7 @@ finally:
 ---
 
 </details>
+
 <details>
 <summary><h1>Bilag</h1></summary>
 Med evnen til at AI-genkende personer, kan vi udnytte dette til at genkende objekter, såsom et tebrev.
