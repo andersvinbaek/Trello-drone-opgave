@@ -642,6 +642,12 @@ finally:
 </details>
 <details>
 <summary><h1>Bilag</h1></summary>
+Med evnen til at AI-genkende personer, kan vi udnytte dette til at genkende objekter, såsom et tebrev.
+
+---
+
+## Dronens AI-tracking
+https://github.com/user-attachments/assets/9092c751-88ed-411e-94b7-067bfb7bbe87
 
 ---
 
