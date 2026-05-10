@@ -41,8 +41,16 @@ Løsningen er, at sætte en krog på Tello-dronen, der så kan samle tebrevet op
 
 ---
 
-## Brugertest
-planlæg brugertest skrev mark
+## Brugertest / Think aloud
+Til styring af vores drone, vil vi gerne have, at man kan kontrollere dronen med håndbevægelser.
+Så for at teste det, lader vi dronen lette i luften og beder brugeren om at udføre fagter, som de vil mene passe til den funktion vi spørger om:
+Ting vi vil teste:
+- Lette
+- Lande og nødstop
+- Dreje
+- Flyve fremad og baglæns
+- Flyve op og ned
+- Flyve venstre og højre
 <br>
 
 ---
