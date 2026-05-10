@@ -47,50 +47,61 @@ Løsningen er, at sætte en krog på Tello-dronen, der så kan samle tebrevet op
 ## 1. Visibility of System Status
 The design should always keep users informed about what is going on through clear and timely feedback.
 
+- Imputet på computeren viser signal tilbage til brugeren, fx trykker du på w, flyver dronen frem.
 ---
 
 ## 2. Match Between the System and the Real World
 The system should use language, concepts, and conventions familiar to the user.
 
+- wasd er allerede udbredt som styring i computerspil.
 ---
 
 ## 3. User Control and Freedom
 Users should be able to easily undo actions, exit unwanted states, and stay in control of the system.
 
+- Flyv frem, flyv tilbage, hvis dronen har strøm så kan den godt.
 ---
 
 ## 4. Consistency and Standards
 The interface should follow consistent patterns and established conventions.
 
+- Dronen tracker når den siger det, samtidig er der en rød kasse rundt om det den tracker.
 ---
 
 ## 5. Error Prevention
 The design should prevent problems from occurring before users make mistakes.
 
+- Hvis koden eller dronen opdager et problem nægter den at lætte.
 ---
 
 ## 6. Recognition Rather than Recall
 The interface should minimize memory load by making options and information visible.
 
+- Den viser præcis så meget som den skal.
 ---
 
 ## 7. Flexibility and Efficiency of Use
 The system should support both inexperienced and experienced users through efficient and flexible interaction.
 
+- Jo mere erfaren du er, jo bedre kan du få dronen til at gøre.
 ---
 
 ## 8. Aesthetic and Minimalist Design
 Interfaces should contain only relevant information and avoid unnecessary complexity.
 
+- Den indeholder hvad den skal.
 ---
 
 ## 9. Help Users Recognize, Diagnose, and Recover from Errors
 Error messages should clearly explain problems and help users recover from them.
 
+- Fejlkoden i python fortæller hvad fejlen er.
 ---
 
 ## 10. Help and Documentation
 Help and documentation should be easy to find, concise, and focused on the user’s tasks.
+
+- Vi har lavet et kontrol ark med alle knapperne til styring.
 </details>
 
 <details>
