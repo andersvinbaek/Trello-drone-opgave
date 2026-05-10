@@ -42,55 +42,55 @@ Løsningen er, at sætte en krog på Tello-dronen, der så kan samle tebrevet op
 ---
 
 <details>
-  <summary><h1>10 Brugervenlighedsheuristikker</h1></summary>
+  <summary><h1>10 Usability Heuristics</h1></summary>
 
-## 1. Systemstatussynlighed
-- Får brugeren tydelig feedback fra systemet?
-
----
-
-## 2. Match mellem system og virkelighed
-- Matcher systemet brugerens sprog og forventninger?
+## 1. Visibility of System Status
+The design should always keep users informed about what is going on through clear and timely feedback.
 
 ---
 
-## 3. Brugerkontrol og frihed
-- Har brugeren kontrol over sine handlinger i systemet?
+## 2. Match Between the System and the Real World
+The system should use language, concepts, and conventions familiar to the user.
 
 ---
 
-## 4. Konsistens og standarder
-- Er designet konsekvent og følger almindelige standarder?
+## 3. User Control and Freedom
+Users should be able to easily undo actions, exit unwanted states, and stay in control of the system.
 
 ---
 
-## 5. Forebyggelse af fejl
-- Hjælper systemet med at forhindre fejl før de opstår?
+## 4. Consistency and Standards
+The interface should follow consistent patterns and established conventions.
 
 ---
 
-## 6. Genkendelse frem for hukommelse
-- Gør systemet det nemt at genkende information frem for at huske den?
+## 5. Error Prevention
+The design should prevent problems from occurring before users make mistakes.
 
 ---
 
-## 7. Fleksibilitet og effektivitet
-- Understøtter systemet både nye og erfarne brugere effektivt?
+## 6. Recognition Rather than Recall
+The interface should minimize memory load by making options and information visible.
 
 ---
 
-## 8. Æstetisk og minimalistisk design
-- Er designet enkelt, overskueligt og fokuseret på det vigtigste?
+## 7. Flexibility and Efficiency of Use
+The system should support both inexperienced and experienced users through efficient and flexible interaction.
 
 ---
 
-## 9. Hjælp brugeren med at forstå og rette fejl
-- Hjælper systemet brugeren med at identificere og løse fejl?
+## 8. Aesthetic and Minimalist Design
+Interfaces should contain only relevant information and avoid unnecessary complexity.
 
 ---
 
-## 10. Hjælp og dokumentation
-- Er hjælp og dokumentation let tilgængelig og brugbar?
+## 9. Help Users Recognize, Diagnose, and Recover from Errors
+Error messages should clearly explain problems and help users recover from them.
+
+---
+
+## 10. Help and Documentation
+Help and documentation should be easy to find, concise, and focused on the user’s tasks.
 </details>
 
 <details>
